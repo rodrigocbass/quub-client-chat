@@ -1,0 +1,62 @@
+<div [hidden]="submitted">
+  <h3>Bem vindo ao chat</h3>
+  <form #addChatForm="ngForm">
+
+    <div class="form-group">
+      <label for="cpf">Cpf</label>
+      <input type="number" class="form-control" id="cpf" 
+      placeholder="Digite seu cpf"
+      required
+      [(ngModel)]="user.cpf" name="cpf" #cpf="ngModel">
+      <div [hidden]="cpf.valid || cpf.pristine"
+            class="alert alert-danger">
+          O cpf é obrigatório
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input type="text" class="form-control" id="email" placeholder="Digite seu e-mail" 
+      required
+      [(ngModel)]="user.email" name="email" #email="ngModel">
+      <div [hidden]="email.valid || email.pristine"
+           class="alert alert-danger">
+          O email é obrigatório
+      </div>
+    </div>  
+    <button class="btn btn-dark" (click)="initChat()" [disabled]="!addChatForm.form.valid">Entrar no chat</button>
+  </form>
+</div>
+
+<div [hidden]="!submitted">
+<p>Bem vindo <span class="badge badge-dark">{{(chat.user != null && chat.user.nome != null) ? chat.user.nome : 'convidado'}}!</span></p>
+
+  <form #mensagemForm="ngForm">
+      <div class="form-group">
+          <label for="msg">Mensagem:</label>
+          <textarea class="form-control" id="msg" placeholder="Digite a mensagem" 
+          required
+          [(ngModel)]="chat.msg" name="msg" #msg="ngModel"></textarea>
+          <div [hidden]="msg.valid || msg.pristine"
+               class="alert alert-danger">
+              Digite a mensagem!
+          </div>
+        </div> 
+
+
+
+<div class="btn-group btn-group-sm">
+    <button class="btn btn-dark" (click)="addMessage()" [disabled]="!mensagemForm.form.valid">Enviar</button>
+  <button class="btn btn-secondary" (click)="processChats();">Receber mensagens</button>
+</div>
+</form>
+<div [hidden]="!processing">
+    <br>
+    <h5>Processando...</h5>
+    <ul>
+      <li *ngFor="let chat of chats">
+       {{chat.user.nome}}: {{chat.msg}}
+      </li>
+    </ul>
+</div>
+</div>
