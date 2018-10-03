@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Chat } from './chat';
 import { User } from './user';
+
  
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -14,7 +15,9 @@ const httpOptions = {
 export class ChatService {
   constructor( 
     private http: HttpClient
-  ) { }
+  ) { 
+
+  }
  
   getChats (): Observable<Chat[]> {
     return this.http.get<Chat[]>("http://localhost:8080/api/chats")
