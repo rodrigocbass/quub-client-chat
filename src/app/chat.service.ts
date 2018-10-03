@@ -19,8 +19,8 @@ export class ChatService {
 
   }
  
-  getChats (): Observable<Chat[]> {
-    return this.http.get<Chat[]>("http://localhost:8080/api/chats")
+  getChats (): Observable<string[]> {
+    return this.http.get<string[]>("http://localhost:8080/api/chats")
   }
   
   initChat (user: User): Observable<Chat> {

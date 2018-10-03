@@ -20,29 +20,25 @@ export class ChatComponent{
   options:Object;
 
   constructor(private chatService: ChatService) { 
-    this.client = new Paho.MQTT.Client("localhost", 61614, "chat");
-    this.client.connect({onSuccess: this.onConnected.bind(this)});
+     this.client = new Paho.MQTT.Client("191.232.197.219", 61614, "chat");
+    //this.client.connect({onSuccess: this.onConnected.bind(this)});
 
    // this.client.subscribe('quub_queue_chat', this.options);
-    // this.client.connect({ userName:'quubmq', password:'B1n4r10quub',onSuccess: this.onConnected.bind(this)});
+     this.client.connect({ userName:'quubmq', password:'B1n4r10quub',onSuccess: this.onConnected.bind(this)});
   }
 
   private onConnected():void {
     console.log('Connected to broker.'); 
     this.client.subscribe("QUUB", null);
-
-    var message = new Paho.MQTT.Message("Olá");
-    message.destinationName = "QUUB";
-   // message.payloadString = "top";
-    this.client.send(message);
-
-    var message = new Paho.MQTT.Message("Deu tudo certo");
-    message.destinationName = "QUUB";
-   // message.payloadString = "top";
-    this.client.send(message);
-
     this.client.onMessageArrived = function (message){
       console.log("Mensagem recebida: " + message.payloadString);
+      //this.chats.push(message.payloadString);
+      
+      var chat :Chat = JSON.parse(message.payloadString);
+      if(this.chats == undefined || this.chats == null){
+        this.chats = [];
+      }
+      this.chats.push(chat);
     }
 
     
@@ -76,12 +72,18 @@ export class ChatComponent{
     );
   }
 
+  public enviaMensagem(msg:string):void{
+    var message = new Paho.MQTT.Message(msg);
+    message.destinationName = "QUUB";
+   // message.payloadString = "top";
+    this.client.send(message);
+  }
+
   addMessage() {
     this.submitted = true;
     this.chat.user = this.user;
-    this.chatService.addMessage(this.chat)
-    .subscribe();
-    this.processChats();
+    var msg = JSON.stringify(this.chat);
+    this.enviaMensagem(msg);
   }
 
   processChats(){
@@ -90,7 +92,6 @@ export class ChatComponent{
                 .subscribe(
                   chats => {
                     console.log(chats);
-                    this.chats = chats;
                   }
                 );
   }

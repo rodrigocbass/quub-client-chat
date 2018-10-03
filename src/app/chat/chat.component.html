@@ -4,7 +4,7 @@
 
     <div class="form-group">
       <label for="cpf">Cpf</label>
-      <input type="number" class="form-control" id="cpf" 
+      <input type="text" class="form-control" id="cpf" 
       placeholder="Digite seu cpf"
       required
       [(ngModel)]="user.cpf" name="cpf" #cpf="ngModel">
@@ -50,9 +50,9 @@
   <!-- <button class="btn btn-secondary" (click)="processChats();">Receber mensagens</button> -->
 </div>
 </form>
-<div [hidden]="!processing">
+<div>
     <br>
-    <h5>Processando...</h5>
+    <h5>Mensagens: </h5>
     <ul>
       <li *ngFor="let chat of chats">
        {{chat.user.nome}}: {{chat.msg}}
