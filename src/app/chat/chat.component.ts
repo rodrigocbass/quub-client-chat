@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { Chat } from '../chat';
 import { ChatService } from '../chat.service';
 import { User } from '../user';
@@ -9,7 +9,8 @@ import {Paho} from 'ng2-mqtt/mqttws31';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent{
+export class ChatComponent implements OnInit, AfterViewChecked{
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
   chat = new Chat();
   user = new User();
@@ -37,6 +38,20 @@ export class ChatComponent{
       this.user = JSON.parse(localStorage.getItem("user"));
     }
   }
+
+  ngOnInit() { 
+    this.scrollToBottom();
+}
+
+ngAfterViewChecked() {        
+    this.scrollToBottom();        
+} 
+
+scrollToBottom(): void {
+    try {
+        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }                 
+}
 
   public onConnected():void {
     console.log('Connected to broker.'); 
