@@ -14,34 +14,38 @@ export class ChatComponent{
   chat = new Chat();
   user = new User();
   chats: Chat[];
+  teste = [];
   submitted = false;
   processing = false;
   private client: Paho.MQTT.Client;
   options:Object;
 
   constructor(private chatService: ChatService) { 
-     this.client = new Paho.MQTT.Client("191.232.197.219", 61614, "chat");
+ 
+    var codigo = "id_" + (Math.random() * 100);
+    this.client = new Paho.MQTT.Client("191.232.197.219", 61614, codigo);
     //this.client.connect({onSuccess: this.onConnected.bind(this)});
 
-   // this.client.subscribe('quub_queue_chat', this.options);
-     this.client.connect({ userName:'quubmq', password:'B1n4r10quub',onSuccess: this.onConnected.bind(this)});
+  // this.client.subscribe('quub_queue_chat', this.options);
+    this.client.connect({ userName:'quubmq', password:'B1n4r10quub',onSuccess: this.onConnected.bind(this)});
+    // set callback handlers
+    this.client.onConnectionLost = this.onConnectionLost;
+    this.client.onMessageArrived = this.onMessageArrived;
+
+
+    if(localStorage.getItem("user") != null){
+      this.submitted = true;
+      this.user = JSON.parse(localStorage.getItem("user"));
+    }
   }
 
-  private onConnected():void {
+  public onConnected():void {
     console.log('Connected to broker.'); 
-    this.client.subscribe("QUUB", null);
-    this.client.onMessageArrived = function (message){
-      console.log("Mensagem recebida: " + message.payloadString);
-      //this.chats.push(message.payloadString);
-      
-      var chat :Chat = JSON.parse(message.payloadString);
-      if(this.chats == undefined || this.chats == null){
-        this.chats = [];
-      }
-      this.chats.push(chat);
-    }
+    this.client.subscribe("QUUB", null);   
+  }
 
-    
+  public publicaMensagem(chat:Chat):void{
+    this.chats.push(chat);
   }
 
   onConnectionLost(responseObject) {
@@ -51,9 +55,15 @@ export class ChatComponent{
   }
 
   onMessageArrived(message) {
-    console.log("onMessageArrived:");
-  }
+    var chat :Chat = JSON.parse(message.payloadString);
+    var chats: Chat[] = JSON.parse(localStorage.getItem("linhaDoTempo"));
+    if(chats == undefined || chats == null){
+      chats = [];
+    }
+    chats.push(chat);
+    localStorage.setItem("linhaDoTempo", JSON.stringify(chats));
 
+  }
 
   newChat(): void {
     this.submitted = false;
@@ -68,6 +78,8 @@ export class ChatComponent{
       chat =>{
         this.chat = chat;
         this.user = chat.user;
+        localStorage.setItem("user", JSON.stringify(this.user));
+       
       }
     );
   }
@@ -77,13 +89,20 @@ export class ChatComponent{
     message.destinationName = "QUUB";
    // message.payloadString = "top";
     this.client.send(message);
+    this.chat.msg = "";
   }
 
   addMessage() {
-    this.submitted = true;
-    this.chat.user = this.user;
-    var msg = JSON.stringify(this.chat);
-    this.enviaMensagem(msg);
+    if(this.chat.msg != null && this.chat.msg != "" && this.chat.msg != undefined){
+      this.submitted = true;
+      this.chat.user = this.user;
+      var msg = JSON.stringify(this.chat);
+      this.enviaMensagem(msg);
+    }
+  }
+
+  public exibe(){
+    return JSON.parse(localStorage.getItem('linhaDoTempo'));
   }
 
   processChats(){

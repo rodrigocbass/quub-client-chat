@@ -20,17 +20,17 @@ export class ChatService {
   }
  
   getChats (): Observable<string[]> {
-    return this.http.get<string[]>("http://localhost:8080/api/chats")
+    return this.http.get<string[]>("https://servico.quub.com.br:8443/quub-chat-1.0/api/chats")
   }
   
   initChat (user: User): Observable<Chat> {
     console.log(user);
-    return this.http.post<Chat>("http://localhost:8080/api/user", user, httpOptions);
+    return this.http.post<Chat>("https://servico.quub.com.br:8443/quub-chat-1.0/api/user", user, httpOptions);
   }
 
   
   addMessage(chat: Chat): Observable<Chat> {
     console.log(chat);
-    return this.http.post<Chat>("http://localhost:8080/api/message", chat, httpOptions);
+    return this.http.post<Chat>("https://servico.quub.com.br:8443/quub-chat-1.0/api/message", chat, httpOptions);
   }
 }

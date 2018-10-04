@@ -3,6 +3,18 @@
   <form #addChatForm="ngForm">
 
     <div class="form-group">
+      <label for="nickName">Nome para o chat</label>
+      <input type="text" class="form-control" id="nickName" 
+      placeholder="Digite seu nome de exibição"
+      required
+      [(ngModel)]="user.nickName" name="nickName" #nickName="ngModel">
+      <div [hidden]="nickName.valid || nickName.pristine"
+            class="alert alert-danger">
+          O nome para o chat é obrigatório
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="cpf">Cpf</label>
       <input type="text" class="form-control" id="cpf" 
       placeholder="Digite seu cpf"
@@ -29,34 +41,29 @@
 </div>
 
 <div [hidden]="!submitted">
-<p>Bem vindo <span class="badge badge-dark">{{(chat.user != null && chat.user.nome != null) ? chat.user.nome : 'convidado'}}!</span></p>
+<p>Bem vindo <span class="badge badge-dark">{{(user != null && user.nickName != null) ? user.nickName : 'convidado'}}!</span></p>
 
   <form #mensagemForm="ngForm">
       <div class="form-group">
           <label for="msg">Mensagem:</label>
-          <textarea class="form-control" id="msg" placeholder="Digite a mensagem" 
-          required
-          [(ngModel)]="chat.msg" name="msg" #msg="ngModel"></textarea>
-          <div [hidden]="msg.valid || msg.pristine"
-               class="alert alert-danger">
-              Digite a mensagem!
-          </div>
+          <input class="form-control" id="msg" placeholder="Digite a mensagem" 
+          [(ngModel)]="chat.msg" name="msg" #msg="ngModel">
         </div> 
-
-
 
 <div class="btn-group btn-group-sm">
     <button class="btn btn-dark" (click)="addMessage()" [disabled]="!mensagemForm.form.valid">Enviar</button>
   <!-- <button class="btn btn-secondary" (click)="processChats();">Receber mensagens</button> -->
 </div>
-</form>
+
 <div>
     <br>
-    <h5>Mensagens: </h5>
-    <ul>
-      <li *ngFor="let chat of chats">
-       {{chat.user.nome}}: {{chat.msg}}
+    <h5>Mensagens:</h5>
+    
+    <ul *ngIf="chats.size > 0">
+      <li *ngFor="let exibe of exibe()">
+         {{exibe.user.nickName}}: {{exibe.msg}}
       </li>
     </ul>
 </div>
+</form>
 </div>

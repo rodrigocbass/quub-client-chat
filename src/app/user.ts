@@ -3,6 +3,7 @@ export class User {
     nome: string;
     cpf: string;
     email: string;
+    nickName: string;
 
     static decode(json: UserJSON): User {
         let user = Object.create(User.prototype);
@@ -17,4 +18,5 @@ interface UserJSON {
     nome: string;
     cpf: string;
     email: string;
+    nickName: string;
 }
