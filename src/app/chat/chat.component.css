@@ -1,7 +1,7 @@
 .chat-history {
     height: 300px;
     overflow-x: auto;
-    margin: 0px 0 0 100px;
+    margin: 0px 0 0 0px;
     position: relative;
   }
 
