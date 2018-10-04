@@ -23,9 +23,9 @@ export class ChatService {
     return this.http.get<string[]>("https://servico.quub.com.br:8443/quub-chat-1.0/api/chats")
   }
   
-  initChat (user: User): Observable<Chat> {
+  initChat (user: User): Observable<User> {
     console.log(user);
-    return this.http.post<Chat>("https://servico.quub.com.br:8443/quub-chat-1.0/api/user", user, httpOptions);
+    return this.http.post<User>("https://servico.quub.com.br:8443/quub-chat-1.0/api/user", user, httpOptions);
   }
 
   

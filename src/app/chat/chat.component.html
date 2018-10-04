@@ -59,7 +59,7 @@
     <br>
     <h5>Mensagens:</h5>
     
-    <ul *ngIf="chats.size > 0">
+    <ul>
       <li *ngFor="let exibe of exibe()">
          {{exibe.user.nickName}}: {{exibe.msg}}
       </li>

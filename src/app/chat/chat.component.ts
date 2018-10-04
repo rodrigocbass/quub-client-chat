@@ -16,7 +16,6 @@ export class ChatComponent{
   chats: Chat[];
   teste = [];
   submitted = false;
-  processing = false;
   private client: Paho.MQTT.Client;
   options:Object;
 
@@ -67,7 +66,6 @@ export class ChatComponent{
 
   newChat(): void {
     this.submitted = false;
-    this.processing = false;
     this.chat = new Chat();
   }
  
@@ -75,9 +73,7 @@ export class ChatComponent{
     this.submitted = true;
     this.chatService.initChat(this.user)
     .subscribe(
-      chat =>{
-        this.chat = chat;
-        this.user = chat.user;
+      user =>{
         localStorage.setItem("user", JSON.stringify(this.user));
        
       }
@@ -97,21 +93,11 @@ export class ChatComponent{
       this.submitted = true;
       this.chat.user = this.user;
       var msg = JSON.stringify(this.chat);
-      this.enviaMensagem(msg);
+      this.enviaMensagem(msg); 
     }
   }
 
   public exibe(){
-    return JSON.parse(localStorage.getItem('linhaDoTempo'));
-  }
-
-  processChats(){
-    this.processing = true;
-    return this.chatService.getChats()
-                .subscribe(
-                  chats => {
-                    console.log(chats);
-                  }
-                );
+      return JSON.parse(localStorage.getItem('linhaDoTempo')); 
   }
 }
