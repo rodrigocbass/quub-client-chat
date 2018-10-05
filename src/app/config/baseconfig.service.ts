@@ -24,7 +24,8 @@ export class BaseconfigService {
   //END POINTS
   public LOGIN_USUARIO: string = '/api/user';
   public RECUPERA_CHAT: string = '/api/chats';
-  public SEND_MESSAGE: string = 'api/message';
+  public SEND_MESSAGE: string = '/api/message';
+  public LISTA_RESTRICOES: string = '/api/restricoes';
 
   constructor() { }
 }

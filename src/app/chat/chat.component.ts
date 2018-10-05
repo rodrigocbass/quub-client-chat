@@ -4,6 +4,9 @@ import { ChatService } from '../chat.service';
 import { User } from '../user';
 import {Paho} from 'ng2-mqtt/mqttws31';
 import { BaseconfigService } from '../config/baseconfig.service';
+import { PalavraRestrita } from '../palavrarestrita';
+import { ToastyConfig, ToastyService } from 'ng2-toasty';
+
 
 
 @Component({
@@ -24,7 +27,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   private client: Paho.MQTT.Client;
   options:Object;
 
-  constructor(private chatService: ChatService, private baseConfig: BaseconfigService) { 
+  constructor(private chatService: ChatService,
+              private baseConfig: BaseconfigService,
+              private toastyConfig: ToastyConfig,
+              private toasty: ToastyService) { 
+
+    this.toastyConfig.theme = 'bootstrap';                
  
     var codigo = "id_" + (Math.random() * 100);
     this.client = new Paho.MQTT.Client(this.baseConfig.URL_MQTT, this.baseConfig.PORTA_MQTT, codigo);
@@ -36,6 +44,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.client.onConnectionLost = this.onConnectionLost;
     this.client.onMessageArrived = this.onMessageArrived;
 
+    //Recupera palavras restritas
+    this.recuperaListaRestricoes();
 
     if(localStorage.getItem("user") != null){
       this.submitted = true;
@@ -101,6 +111,13 @@ scrollToBottom(): void {
     );
   }
 
+  recuperaListaRestricoes(){
+    this.chatService.getListaRestricoes()
+      .subscribe(palavraRestrita =>{
+          localStorage.setItem('restricoes', JSON.stringify(palavraRestrita));
+      });
+  }
+
   private registraUsuario(user: User){
     var msg = JSON.stringify(this.chat);
     this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_REGISTER);
@@ -120,11 +137,20 @@ scrollToBottom(): void {
   }
 
   addMessage() {
+    var retorno:any = null;
     if(this.chat.msg != null && this.chat.msg != '' && this.chat.msg != undefined){
-      this.submitted = true;
-      this.chat.user = this.user;
-      var msg = JSON.stringify(this.chat);
-      this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_CHAT); 
+      var restricoes:PalavraRestrita[] = JSON.parse(localStorage.getItem('restricoes'));
+      if(restricoes != null){
+        retorno = restricoes.find(e =>  this.chat.msg.indexOf(e.descricao) != -1);
+      }
+      if(retorno == undefined){
+        this.submitted = true;
+        this.chat.user = this.user;
+        var msg = JSON.stringify(this.chat);
+        this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_CHAT); 
+      }else{
+        this.toasty.error('A ' + retorno.descricao + ' não pode ser utilizada.');
+      }
     }
   }
 

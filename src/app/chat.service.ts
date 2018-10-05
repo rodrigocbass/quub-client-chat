@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Chat } from './chat';
 import { User } from './user';
 import { BaseconfigService } from './config/baseconfig.service';
+import { PalavraRestrita } from './palavrarestrita';
 
  
 const httpOptions = {
@@ -23,6 +24,10 @@ export class ChatService {
  
   getChats (): Observable<string[]> {
     return this.http.get<string[]>(this.baseConfig.URL_API + this.baseConfig.RECUPERA_CHAT);
+  }
+
+  getListaRestricoes (): Observable<PalavraRestrita[]> {
+    return this.http.get<PalavraRestrita[]>(this.baseConfig.URL_API + this.baseConfig.LISTA_RESTRICOES);
   }
   
   initChat (user: User): Observable<User> {

@@ -6,6 +6,7 @@ import { HttpClientModule }    from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
+import {ToastyModule} from 'ng2-toasty';
 
 @NgModule({
   declarations: [
@@ -15,8 +16,10 @@ import { ChatComponent } from './chat/chat.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastyModule.forRoot()
   ],
+ // exports: [BrowserModule,ToastyModule]
   providers: [],
   bootstrap: [AppComponent]
 })
