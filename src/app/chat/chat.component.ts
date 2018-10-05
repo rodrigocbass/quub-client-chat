@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   constructor(private chatService: ChatService,
               private baseConfig: BaseconfigService,
               private toastyConfig: ToastyConfig,
-              private toasty: ToastyService) { 
+              private toasty: ToastyService) {                  
 
     this.toastyConfig.theme = 'bootstrap';                
  
@@ -68,7 +68,14 @@ scrollToBottom(): void {
 }
 
   public onConnected():void {
-    console.log('Connected to broker.');   
+    console.log('Connected to broker.'); 
+    this.verificarUsuarioOnline();  
+
+  }
+
+  public verificarUsuarioOnline(){
+
+    //this.client.stopTrace();
   }
 
   public publicaMensagem(chat:Chat):void{
@@ -119,12 +126,12 @@ scrollToBottom(): void {
   }
 
   private registraUsuario(user: User){
-    var msg = JSON.stringify(this.chat);
+    var msg = JSON.stringify(user);
     this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_REGISTER);
   }
 
   private desconectarRegistraUsuario(user: User){
-    var msg = JSON.stringify(this.chat);
+    var msg = JSON.stringify(user);
     this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_UNREGISTER);
   }
 
@@ -132,9 +139,16 @@ scrollToBottom(): void {
     var message = new Paho.MQTT.Message(msg);
     message.destinationName = topic;
    // message.payloadString = "top";
-    this.client.send(message);
+    if(this.client.isConnected()){
+      this.client.send(message);
+    }else{
+      var user = JSON.parse(localStorage.getItem('user'));
+      this.desconectarRegistraUsuario(user);
+    }
     this.chat.msg = "";
   }
+
+  
 
   addMessage() {
     var retorno:any = null;
@@ -149,7 +163,7 @@ scrollToBottom(): void {
         var msg = JSON.stringify(this.chat);
         this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_CHAT); 
       }else{
-        this.toasty.error('A ' + retorno.descricao + ' não pode ser utilizada.');
+        this.toasty.error('A palavra <b>' + retorno.descricao + '</b> não pode ser utilizada.');
       }
     }
   }
