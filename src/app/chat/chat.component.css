@@ -1,5 +1,9 @@
+#tudo{
+  min-width: 290px;
+}
 .chat-history {
     height: 300px;
+
     overflow-x: auto;
     margin: 0px 0 0 0px;
     position: relative;

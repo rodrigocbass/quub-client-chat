@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class BaseconfigService {
   public FILA_PADRAO_CHAT: string = 'QUUB';
   public FILA_PADRAO_REGISTER: string = 'quub_queue_chat_login';
+  public FILA_PADRAO_UNREGISTER: string = 'quub_queue_chat_logout';
 
   //MQTT
   public URL_MQTT: string = '191.232.197.219';

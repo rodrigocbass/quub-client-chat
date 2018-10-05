@@ -5,6 +5,7 @@ import { User } from '../user';
 import {Paho} from 'ng2-mqtt/mqttws31';
 import { BaseconfigService } from '../config/baseconfig.service';
 
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -57,8 +58,7 @@ scrollToBottom(): void {
 }
 
   public onConnected():void {
-    console.log('Connected to broker.'); 
-    this.client.subscribe("QUUB", null);   
+    console.log('Connected to broker.');   
   }
 
   public publicaMensagem(chat:Chat):void{
@@ -92,8 +92,9 @@ scrollToBottom(): void {
     this.chatService.initChat(this.user)
     .subscribe(
       user => {
-        localStorage.setItem('user', JSON.stringify(this.user));
+        localStorage.setItem('user', JSON.stringify(user));
         this.client.subscribe('id_' + user.codAcesso, null);
+        this.client.subscribe("QUUB", null); 
         this.registraUsuario(user);
        
       }
@@ -103,6 +104,11 @@ scrollToBottom(): void {
   private registraUsuario(user: User){
     var msg = JSON.stringify(this.chat);
     this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_REGISTER);
+  }
+
+  private desconectarRegistraUsuario(user: User){
+    var msg = JSON.stringify(this.chat);
+    this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_UNREGISTER);
   }
 
   public enviaMensagem(msg: string, topic: string): void {
@@ -123,13 +129,14 @@ scrollToBottom(): void {
   }
 
   sair(){
-    this.client.unsubscribe(this.baseConfig.FILA_PADRAO_CHAT);
-    this.client.unsubscribe(this.baseConfig.FILA_PADRAO_REGISTER);
     var user = JSON.parse(localStorage.getItem('user'));
-    this.client.unsubscribe('id_' + user.codAcesso); 
-    localStorage.removeItem('msg');
+    //AVISAR SERVIDOR QUE USUÁRIO DESCONECTOU
+    this.desconectarRegistraUsuario(user);
+    this.client.unsubscribe(this.baseConfig.FILA_PADRAO_CHAT, null);
+    this.client.unsubscribe('id_' + user.codAcesso, null); 
+    localStorage.removeItem('linhaDoTempo');
     localStorage.removeItem('user');
-
+    this.submitted = false;
   }
 
   public exibe(){

@@ -1,55 +1,60 @@
-<div [hidden]="submitted">
-  <h3>Bem vindo ao chat</h3>
-  <form #addChatForm="ngForm">
+<div id="tudo">
+    <div [hidden]="submitted">
+        <h3>Bem vindo ao chat</h3>
+        <form #addChatForm="ngForm">
 
-      <div class="form-group">
-          <label for="nickName">Nome para o chat</label>
-          <input type="text" class="form-control" id="nickName" placeholder="Digite seu nome de exibição" required [(ngModel)]="user.nickName" name="nickName" #nickName="ngModel">
-          <div [hidden]="nickName.valid || nickName.pristine" class="alert alert-danger">
-              O nome para o chat é obrigatório
-          </div>
-      </div>
+            <div class="form-group">
+                <label for="nickName">Nome para o chat</label>
+                <input type="text" class="form-control" id="nickName" placeholder="Digite seu nome de exibição" required [(ngModel)]="user.nickName" name="nickName" #nickName="ngModel">
+                <div [hidden]="nickName.valid || nickName.pristine" class="alert alert-danger">
+                    O nome para o chat é obrigatório
+                </div>
+            </div>
 
-      <div class="form-group">
-          <label for="cpf">Cpf</label>
-          <input type="text" class="form-control" id="cpf" placeholder="Digite seu cpf" required [(ngModel)]="user.cpf" name="cpf" #cpf="ngModel">
-          <div [hidden]="cpf.valid || cpf.pristine" class="alert alert-danger">
-              O cpf é obrigatório
-          </div>
-      </div>
+            <div class="form-group">
+                <label for="cpf">Cpf</label>
+                <input type="text" class="form-control" id="cpf" placeholder="Digite seu cpf" required [(ngModel)]="user.cpf" name="cpf" #cpf="ngModel">
+                <div [hidden]="cpf.valid || cpf.pristine" class="alert alert-danger">
+                    O cpf é obrigatório
+                </div>
+            </div>
 
-      <div class="form-group">
-          <label for="email">E-mail</label>
-          <input type="text" class="form-control" id="email" placeholder="Digite seu e-mail" required [(ngModel)]="user.email" name="email" #email="ngModel">
-          <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
-              O email é obrigatório
-          </div>
-      </div>
-      <button class="btn btn-dark" (click)="initChat()" [disabled]="!addChatForm.form.valid">Entrar no chat</button>
-  </form>
-</div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" id="email" placeholder="Digite seu e-mail" required [(ngModel)]="user.email" name="email" #email="ngModel">
+                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                    O email é obrigatório
+                </div>
+            </div>
+            <button class="btn btn-dark" (click)="initChat()" [disabled]="!addChatForm.form.valid">Entrar no chat</button>
+        </form>
+    </div>
 
-<div [hidden]="!submitted">
-   <form #mensagemForm="ngForm">
+    <div [hidden]="!submitted">
+        <div class="chat-history" #scrollMe>
+            <p *ngFor="let exibe of exibe()">
+                <b class="{{(exibe.user.nickName == user.nickName) ? 'meuusuario' : 'outrousuario'}}">{{exibe.user.nickName}}:</b> {{exibe.msg}}
+            </p>
+        </div>
+        <hr />
+        <p>Bem vindo <span class="badge badge-dark">{{(user != null && user.nickName != null) ? user.nickName : 'convidado'}}! </span>
+            <button style="margin-left: 20px;  display: block; float: right;" class="btn btn-outline-dark btn-sm" (click)="sair()">Sair</button>
+        </p>
+        <label for="msg">Mensagens:</label>
 
-      <div id="chat">
-         <div class="chat-history" #scrollMe>
-          <p  *ngFor="let exibe of exibe()">
-            <b class="{{(exibe.user.nickName == user.nickName) ? 'meuusuario' : 'outrousuario'}}">{{exibe.user.nickName}}:</b> {{exibe.msg}}
-          </p>
-</div>
-          <hr />
-          <div class="form-group">
-              <p>Bem vindo <span class="badge badge-dark">{{(user != null && user.nickName != null) ? user.nickName : 'convidado'}}!</span> <button class="btn btn-xs" (click)="sair()">Sair</button></p>
-              <label for="msg">Mensagens:</label>
-              <input class="form-control" id="msg" placeholder="Digite a mensagem" [(ngModel)]="chat.msg" name="msg" #msg="ngModel">
-          </div>
+        <form #mensagemForm="ngForm">
 
-          <div class="btn-group btn-group-sm">
-              <button class="btn btn-dark" (click)="addMessage()" [disabled]="!mensagemForm.form.valid">Enviar</button>
-              <!-- <button class="btn btn-secondary" (click)="processChats();">Receber mensagens</button> -->
-          </div>
+            <div id="chat">
+                <div class="form-group">
+                    <input class="form-control" id="msg" placeholder="Digite a mensagem" [(ngModel)]="chat.msg" name="msg" #msg="ngModel">
+                </div>
 
-      </div>
-  </form>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-dark" (click)="addMessage()" [disabled]="!mensagemForm.form.valid">Enviar</button>
+                    <!-- <button class="btn btn-secondary" (click)="processChats();">Receber mensagens</button> -->
+                </div>
+
+            </div>
+        </form>
+    </div>
 </div>
