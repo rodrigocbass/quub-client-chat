@@ -40,7 +40,7 @@
 </div>
           <hr />
           <div class="form-group">
-              <p>Bem vindo <span class="badge badge-dark">{{(user != null && user.nickName != null) ? user.nickName : 'convidado'}}!</span></p>
+              <p>Bem vindo <span class="badge badge-dark">{{(user != null && user.nickName != null) ? user.nickName : 'convidado'}}!</span> <button class="btn btn-xs" (click)="sair()">Sair</button></p>
               <label for="msg">Mensagens:</label>
               <input class="form-control" id="msg" placeholder="Digite a mensagem" [(ngModel)]="chat.msg" name="msg" #msg="ngModel">
           </div>

@@ -122,6 +122,16 @@ scrollToBottom(): void {
     }
   }
 
+  sair(){
+    this.client.unsubscribe(this.baseConfig.FILA_PADRAO_CHAT);
+    this.client.unsubscribe(this.baseConfig.FILA_PADRAO_REGISTER);
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.client.unsubscribe('id_' + user.codAcesso); 
+    localStorage.removeItem('msg');
+    localStorage.removeItem('user');
+
+  }
+
   public exibe(){
       return JSON.parse(localStorage.getItem('linhaDoTempo')); 
   }
