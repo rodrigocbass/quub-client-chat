@@ -4,6 +4,7 @@ export class User {
     cpf: string;
     email: string;
     nickName: string;
+    codAcesso: number;
 
     static decode(json: UserJSON): User {
         let user = Object.create(User.prototype);

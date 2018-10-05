@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Chat } from './chat';
 import { User } from './user';
+import { BaseconfigService } from './config/baseconfig.service';
 
  
 const httpOptions = {
@@ -14,23 +15,24 @@ const httpOptions = {
 })
 export class ChatService {
   constructor( 
-    private http: HttpClient
+    private http: HttpClient,
+    private baseConfig: BaseconfigService
   ) { 
 
   }
  
   getChats (): Observable<string[]> {
-    return this.http.get<string[]>("https://servico.quub.com.br:8443/quub-chat-1.0/api/chats")
+    return this.http.get<string[]>(this.baseConfig.URL_API + this.baseConfig.RECUPERA_CHAT);
   }
   
   initChat (user: User): Observable<User> {
     console.log(user);
-    return this.http.post<User>("https://servico.quub.com.br:8443/quub-chat-1.0/api/user", user, httpOptions);
+    return this.http.post<User>(this.baseConfig.URL_API + this.baseConfig.LOGIN_USUARIO, user, httpOptions);
   }
 
   
   addMessage(chat: Chat): Observable<Chat> {
     console.log(chat);
-    return this.http.post<Chat>("https://servico.quub.com.br:8443/quub-chat-1.0/api/message", chat, httpOptions);
+    return this.http.post<Chat>(this.baseConfig.URL_API + this.baseConfig.SEND_MESSAGE, chat, httpOptions);
   }
 }
