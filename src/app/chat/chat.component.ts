@@ -108,17 +108,20 @@ scrollToBottom(): void {
   }
  
   initChat() {
-    this.submitted = true;
-    this.chatService.initChat(this.user)
-    .subscribe(
-      user => {
+   this.chatService.login(this.user)
+      .then(user => {
+        //this.toasty.success('Usuário autenticado com sucesso!');
         localStorage.setItem('user', JSON.stringify(user));
         this.client.subscribe('id_' + user.codAcesso, null);
         this.client.subscribe("QUUB", null); 
         this.registraUsuario(user);
-       
-      }
-    );
+        this.submitted = true;
+      })
+      .catch(erro => {
+        this.toasty.error('Cpf e/ou email inválido(s).');
+      });
+
+    
   }
 
   recuperaListaRestricoes(){

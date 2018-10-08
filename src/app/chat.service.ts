@@ -35,8 +35,20 @@ export class ChatService {
   }
   
   initChat (user: User): Observable<User> {
-    console.log(user);
     return this.http.post<User>(this.baseConfig.URL_API + this.baseConfig.LOGIN_USUARIO, user, httpOptions);
+  }
+
+  login(user: User) :Promise<User>{
+    return this.http.post<User>(this.baseConfig.URL_API + this.baseConfig.LOGIN_USUARIO, user, httpOptions)
+    .toPromise()
+    .then(response =>{
+      return response;
+    }).catch(response =>{
+      if(response.status === 400){
+        return Promise.reject('Cpf e/ou email inválido(s).');
+      }
+      return Promise.reject(response);  
+    });
   }
 
   
