@@ -6,6 +6,7 @@ import {Paho} from 'ng2-mqtt/mqttws31';
 import { BaseconfigService } from '../config/baseconfig.service';
 import { PalavraRestrita } from '../palavrarestrita';
 import { ToastyConfig, ToastyService } from 'ng2-toasty';
+import { RegisterUser } from '../RegisterUser';
 
 
 
@@ -22,7 +23,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   user = new User();
 
   chats: Chat[];
-  teste = [];
+  registerUsers: any[];
+  registerUserSelected: RegisterUser;
   submitted = false;
   private client: Paho.MQTT.Client;
   options:Object;
@@ -46,6 +48,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
     //Recupera palavras restritas
     this.recuperaListaRestricoes();
+    this.recuperaListaUserLogados();
 
     if(localStorage.getItem("user") != null){
       this.submitted = true;
@@ -122,6 +125,14 @@ scrollToBottom(): void {
     this.chatService.getListaRestricoes()
       .subscribe(palavraRestrita =>{
           localStorage.setItem('restricoes', JSON.stringify(palavraRestrita));
+      });
+  }
+
+  recuperaListaUserLogados(){
+    this.chatService.getListaUsuarios()
+      .subscribe(registerUser =>{
+          this.registerUsers = registerUser;
+          localStorage.setItem('registerUser', JSON.stringify(registerUser));
       });
   }
 

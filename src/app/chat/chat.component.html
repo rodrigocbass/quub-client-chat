@@ -3,27 +3,31 @@
         <h3>Bem vindo ao chat</h3>
         <form #addChatForm="ngForm">
 
-            <div class="form-group">
-                <label for="nickName">Nome para o chat</label>
-                <input type="text" class="form-control" id="nickName" placeholder="Digite seu nome de exibição" required [(ngModel)]="user.nickName" name="nickName" #nickName="ngModel">
-                <div [hidden]="nickName.valid || nickName.pristine" class="alert alert-danger">
-                    O nome para o chat é obrigatório
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="ui-float-label">
+                        <input id="nickName" required [(ngModel)]="user.nickName"   name="nickName" #nickName="ngModel" pInputText #nickName="ngModel" >
+                        <label for="nickName">Nome</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="ui-float-label">
+                        <p-inputMask mask="999.999.999-99" required id="cpf" [(ngModel)]="user.cpf" name="cpf" #cpf="ngModel"></p-inputMask>
+                        <label for="cpf">CPF</label>
+                    </span>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="cpf">Cpf</label>
-                <input type="text" class="form-control" id="cpf" placeholder="Digite seu cpf" required [(ngModel)]="user.cpf" name="cpf" #cpf="ngModel">
-                <div [hidden]="cpf.valid || cpf.pristine" class="alert alert-danger">
-                    O cpf é obrigatório
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="text" class="form-control" id="email" placeholder="Digite seu e-mail" required [(ngModel)]="user.email" name="email" #email="ngModel">
-                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
-                    O email é obrigatório
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="ui-float-label">
+                        <input type="text" id="email" required [(ngModel)]="user.email" 
+                        name="email" #email="ngModel" pInputText #email="ngModel"
+                        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+                        <label for="email">E-mail</label>
+                    </span>
                 </div>
             </div>
             <button class="btn btn-dark" (click)="initChat()" [disabled]="!addChatForm.form.valid">Entrar no chat</button>
@@ -56,6 +60,15 @@
 
             </div>
         </form>
+        <hr />
+        <h5 class="first">Usuários conectados</h5>
+        <p-table [value]="registerUsers">
+            <ng-template pTemplate="body" let-pRegisterUser>
+                <tr>
+                    <td>{{pRegisterUser.user.nome}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </div>
 <ng2-toasty></ng2-toasty>

@@ -29,6 +29,10 @@ export class ChatService {
   getListaRestricoes (): Observable<PalavraRestrita[]> {
     return this.http.get<PalavraRestrita[]>(this.baseConfig.URL_API + this.baseConfig.LISTA_RESTRICOES);
   }
+
+  getListaUsuarios (): Observable<User[]> {
+    return this.http.get<User[]>(this.baseConfig.URL_API + this.baseConfig.LISTA_USUARIOS);
+  }
   
   initChat (user: User): Observable<User> {
     console.log(user);

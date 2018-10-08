@@ -15,10 +15,10 @@ export class BaseconfigService {
   public PASSWORD_MQTT: string = 'B1n4r10quub';
 
   //API
-  public URL_API: string = 'http://localhost:8080';
+  //public URL_API: string = 'http://localhost:8080';
 
   //API PRODUÇÃO
-  //public URL_API: string = 'https://servico.quub.com.br:8443/quub-chat-1.0';
+  public URL_API: string = 'https://servico.quub.com.br:8443/quub-chat-1.0';
 
   
   //END POINTS
@@ -26,6 +26,7 @@ export class BaseconfigService {
   public RECUPERA_CHAT: string = '/api/chats';
   public SEND_MESSAGE: string = '/api/message';
   public LISTA_RESTRICOES: string = '/api/restricoes';
+  public LISTA_USUARIOS: string = '/api/usersconnect'
 
   constructor() { }
 }
