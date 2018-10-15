@@ -9,7 +9,6 @@ import { ToastyConfig, ToastyService } from 'ng2-toasty';
 import { RegisterUser } from '../RegisterUser';
 
 
-
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -32,7 +31,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   constructor(private chatService: ChatService,
               private baseConfig: BaseconfigService,
               private toastyConfig: ToastyConfig,
-              private toasty: ToastyService) {                  
+              private toasty: ToastyService) {       
+                
 
     this.toastyConfig.theme = 'bootstrap';                
  
@@ -108,6 +108,7 @@ scrollToBottom(): void {
   }
  
   initChat() {
+    this.user.ip = localStorage.getItem("ip");
    this.chatService.login(this.user)
       .then(user => {
         //this.toasty.success('Usuário autenticado com sucesso!');

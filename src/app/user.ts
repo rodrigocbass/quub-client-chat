@@ -5,6 +5,7 @@ export class User {
     email: string;
     nickName: string;
     codAcesso: number;
+    ip: string;
 
     static decode(json: UserJSON): User {
         let user = Object.create(User.prototype);
@@ -20,4 +21,5 @@ interface UserJSON {
     cpf: string;
     email: string;
     nickName: string;
+    ip: string;
 }
