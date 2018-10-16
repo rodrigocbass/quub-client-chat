@@ -21,6 +21,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   chat = new Chat();
   user = new User();
   userReservado: RegisterUser;
+  mostraReservado: boolean = false;
 
   chats: Chat[];
   registerUsers: any[];
@@ -73,6 +74,7 @@ scrollToBottom(): void {
 
   public onConnected():void {
     console.log('Connected to broker.'); 
+    this.client.subscribe(this.baseConfig.FILA_PADRAO_CHAT, null); 
     this.verificarUsuarioOnline();  
 
   }
@@ -115,7 +117,7 @@ scrollToBottom(): void {
         //this.toasty.success('Usuário autenticado com sucesso!');
         localStorage.setItem('user', JSON.stringify(user));
         this.client.subscribe('id_' + user.codAcesso, null);
-        this.client.subscribe("QUUB", null); 
+        this.client.subscribe(this.baseConfig.FILA_PADRAO_CHAT, null); 
         this.registraUsuario(user);
         this.submitted = true;
       })
@@ -168,6 +170,8 @@ scrollToBottom(): void {
 
   addMessage() {
     var retorno:any = null;
+    var topicEnvio = null;
+ 
     if(this.chat.msg != null && this.chat.msg != '' && this.chat.msg != undefined){
       var restricoes:PalavraRestrita[] = JSON.parse(localStorage.getItem('restricoes'));
       if(restricoes != null){
@@ -176,8 +180,16 @@ scrollToBottom(): void {
       if(retorno == undefined){
         this.submitted = true;
         this.chat.user = this.user;
-        var msg = JSON.stringify(this.chat);
-        this.enviaMensagem(msg, this.baseConfig.FILA_PADRAO_CHAT); 
+        var msg = null;
+        if(this.userReservado == null){
+          topicEnvio = this.baseConfig.FILA_PADRAO_CHAT;
+          msg = JSON.stringify(this.chat);
+        }else{
+          topicEnvio = 'id_' + this.userReservado.codAcesso;
+          this.chat.userDestination = this.userReservado.user;
+          msg = JSON.stringify(this.chat);
+        }
+        this.enviaMensagem(msg, topicEnvio); 
       }else{
         this.toasty.error('A palavra <b>' + retorno.descricao + '</b> não pode ser utilizada.');
       }
@@ -196,18 +208,24 @@ scrollToBottom(): void {
   }
 
   public exibe(){
-      return JSON.parse(localStorage.getItem('linhaDoTempo')); 
+      var dadosExibe = JSON.parse(localStorage.getItem('linhaDoTempo')); 
+      return dadosExibe;
   }
 
   public selecionaUsuarioReservado(registroUsuario:RegisterUser){
     if(this.userReservado != null && this.userReservado != undefined){
       this.client.unsubscribe('id_' + this.userReservado.codAcesso, null); 
+      
+
     }
     if (registroUsuario != null){
       this.client.subscribe('id_' + registroUsuario.codAcesso, null);
       this.userReservado = registroUsuario;
+      this.mostraReservado = true;
     }else{
       this.userReservado = null;
+      this.mostraReservado = false;
     }
+    this.client.subscribe('id_' + this.user.codAcesso, null);
   }
 }

@@ -37,7 +37,9 @@
     <div [hidden]="!submitted">
         <div class="chat-history" #scrollMe>
             <p *ngFor="let exibe of exibe()">
-                <b class="{{(exibe.user.nickName == user.nickName) ? 'meuusuario' : 'outrousuario'}}">{{exibe.user.nickName}}:</b> {{exibe.msg}}
+                <b class="{{(exibe.user.nickName == user.nickName) ? 'meuusuario' : 'outrousuario'}}">
+                    {{exibe.user.nickName}} {{(exibe.userDestination != null) ? ' (reservado) para ' + exibe.userDestination.nome  : ''}}:
+                </b> {{exibe.msg}}
             </p>
         </div>
         <hr />
@@ -52,7 +54,9 @@
                 <div class="form-group">
                     <input class="form-control" id="msg" placeholder="Digite a mensagem" [(ngModel)]="chat.msg" name="msg" #msg="ngModel">
                 </div>
-
+                <div [hidden]="!mostraReservado">
+                    Conversa reservada com: {{(userReservado != undefined) ? userReservado.user.nome : ''}}
+                </div>    
                 <div class="btn-group btn-group-sm">
                     <button class="btn btn-dark" (click)="addMessage()" [disabled]="!mensagemForm.form.valid">Enviar</button>
                     <!-- <button class="btn btn-secondary" (click)="processChats();">Receber mensagens</button> -->
@@ -62,11 +66,9 @@
         </form>
         <hr />
         <h5 class="first">Usuários conectados</h5>
+        <button (click)="selecionaUsuarioReservado(null)">Todos</button>
         <p-table [value]="registerUsers">
-            <ng-template pTemplate="body" let-pRegisterUser>
-                <tr>
-                    <td><button (click)="selecionaUsuarioReservado(null)">Todos</button></td>
-                </tr>
+            <ng-template pTemplate="body" let-pRegisterUser> 
                 <tr>
                     <td><button (click)="selecionaUsuarioReservado(pRegisterUser)" >{{pRegisterUser.user.nome}}</button></td>
                 </tr>
