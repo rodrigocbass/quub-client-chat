@@ -20,6 +20,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   chat = new Chat();
   user = new User();
+  userReservado: RegisterUser;
 
   chats: Chat[];
   registerUsers: any[];
@@ -108,7 +109,7 @@ scrollToBottom(): void {
   }
  
   initChat() {
-    this.user.ip = localStorage.getItem("ip");
+    this.user.ipPublico = localStorage.getItem("ip");
    this.chatService.login(this.user)
       .then(user => {
         //this.toasty.success('Usuário autenticado com sucesso!');
@@ -196,5 +197,17 @@ scrollToBottom(): void {
 
   public exibe(){
       return JSON.parse(localStorage.getItem('linhaDoTempo')); 
+  }
+
+  public selecionaUsuarioReservado(registroUsuario:RegisterUser){
+    if(this.userReservado != null && this.userReservado != undefined){
+      this.client.unsubscribe('id_' + this.userReservado.codAcesso, null); 
+    }
+    if (registroUsuario != null){
+      this.client.subscribe('id_' + registroUsuario.codAcesso, null);
+      this.userReservado = registroUsuario;
+    }else{
+      this.userReservado = null;
+    }
   }
 }

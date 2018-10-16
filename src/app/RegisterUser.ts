@@ -6,6 +6,7 @@ export class RegisterUser {
     ativo: boolean;
     user: User;
     dataConexao: Date;
+    codAcesso: string;
     
     static decode(json: RegisterUserJSON): RegisterUser {
         let registerUser = Object.create(RegisterUser.prototype);
@@ -20,4 +21,5 @@ interface RegisterUserJSON {
     ativo: boolean;
     user: User;
     dataConexao: string;
+    codAcesso: string;
 }
