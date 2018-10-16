@@ -9,16 +9,16 @@ export class BaseconfigService {
   public FILA_PADRAO_UNREGISTER: string = 'quub_queue_chat_logout';
 
   //MQTT
-  public URL_MQTT: string = '191.232.197.219';
+  public URL_MQTT: string = '<documento em anexo>';
   public PORTA_MQTT: number = 61614;
   public USER_MQTT: string = 'quubmq';
-  public PASSWORD_MQTT: string = 'B1n4r10quub';
+  public PASSWORD_MQTT: string = '<documento em anexo>';
 
   //API
   public URL_API: string = 'http://localhost:8080';
 
   //API PRODUÇÃO
-  //public URL_API: string = 'https://servico.quub.com.br:8443/quub-chat-1.0';
+
 
   
   //END POINTS
